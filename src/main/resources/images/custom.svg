@@ -6,7 +6,10 @@
   Build: 7E4D1F7C
 -->
 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-	 x="0px" y="0px" width="36px" height="36px" viewBox="0 0 80 80" xml:space="preserve">
-<path fill="none" stroke="#F2F0EC" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"
-	  d="M50 16 L26 40 L50 64"/>
+	 x="0px" y="0px" width="36px" height="36px" viewBox="0 0 24 24" xml:space="preserve">
+<g fill="none" stroke="#EE502E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+<path d="M8 4 H3 v16 h5"/>
+<path d="M16 4 h5 v16 h-5"/>
+<path d="M12 3 v3 M12 10.5 v3 M12 18 v3"/>
+</g>
 </svg>

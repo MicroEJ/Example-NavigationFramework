@@ -8,16 +8,18 @@ It shows how to declare the pages of an application, navigate between them, anim
 
 The application's home page displays a list of accessible pages, each one demonstrating one of the Navigation Framework's capabilities.
 
-![home-page.png](images/home-page.png)
+![navigation-example.gif](resources/navigation-example.gif)
 
 Here are the items of the home page:
 
-- `Immediate Transition`: navigates to a page without animation.
-- `Slide Transition`: navigates to a page with the `SlideTransition` of the library.
-- `Fade Transition`: navigates to a page with the `FadeTransition` of the library.
-- `Custom Transition`: navigates to a page with a transition written for this example, which splits the current content apart to reveal the next page.
-- `Passing Arguments between Pages`: carries the check boxes and radio button selection to the next page as the argument of the navigation.
-- `Advanced Navigation`: chains four pages and displays the navigation history, using `navigateTo`, `replaceWith`, `navigateBack` and `navigateBackTo`.
+- `Immediate`: navigates to a page without animation, with `Transition.IMMEDIATE`.
+- `Slide`: navigates to a page with the `SlideTransition` of the library. The next page slides over the current one, which does not move. The direction is mirrored on the way back.
+- `Fade`: navigates to a page with the `FadeTransition` of the library. The next page fades in over the current one.
+- `Custom`: navigates to a page with a transition written for this example. It reveals the next page through a band that widens from the center of the content area, and through two bands that grow from the edges on the way back.
+- `Passing arguments`: carries the check boxes and radio button selection to the next page as the argument of the navigation. The result page slides up from the bottom edge, and slides back down when it is left.
+- `Advanced navigation`: chains four pages and displays the navigation history, using `navigateTo`, `replaceWith`, `navigateBack` and `navigateBackTo`.
+
+Every page animates its back control and its home control with the transition that brought the page in.
 
 The source is organized as follows:
 
@@ -35,6 +37,15 @@ The source is organized as follows:
     - MICROUI-3.6 or higher.
     - MICROVG-1.5 or higher.
     - DRAWING-1.0 or higher.
+
+- An images heap large enough for one image the size of the page content area.
+  That image is the buffer the animated transitions draw the incoming page from.
+  The `ej.microui.memory.imagesheap.size` property of `configuration/common.properties` is sized for it.
+  Set the `ej.navigation.transition.snapshots` constant to `false` to remove that buffer.
+  The fade and the custom band reveal then become instant page changes.
+- A Java thread stack of at least 8 blocks of 512 bytes.
+  MWT renders a widget tree with four stack frames per nesting level, and the default of 4 blocks overflows on the pages of this example.
+  The `core.memory.thread.max.size` property of `configuration/common.properties` is set for it.
 
 This example has been tested on:
 

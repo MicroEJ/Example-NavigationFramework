@@ -1,32 +1,35 @@
 /*
 Copyright 2026 MicroEJ Corp. All rights reserved.
 Use of this source code is governed by a BSD-style license that can be found with this software
+
+Build: 7E4D1F7C
 */
 package com.microej.example.navigationframework;
 
-
 import com.microej.example.navigationframework.navigation.ExamplePageFactory;
 import com.microej.example.navigationframework.navigation.Pages;
-import com.microej.example.navigationframework.widget.VectorCheckBox;
-import com.microej.example.navigationframework.widget.VectorRadioButton;
+import com.microej.example.navigationframework.widget.NavigationRow;
 import com.microej.example.navigationframework.widget.VectorImageButton;
 import com.microej.example.navigationframework.widget.VectorImageWidget;
 import com.microej.example.navigationframework.widget.VectorLabel;
+import com.microej.example.navigationframework.widget.VectorSelector;
 import ej.microui.MicroUI;
-import ej.microui.display.Colors;
 import ej.microvg.VectorFont;
 import ej.mwt.Desktop;
 import ej.mwt.style.EditableStyle;
 import ej.mwt.style.background.NoBackground;
 import ej.mwt.style.background.RectangularBackground;
+import ej.mwt.style.background.RoundedBackground;
+import ej.mwt.style.dimension.FixedDimension;
 import ej.mwt.style.dimension.OptimalDimension;
 import ej.mwt.style.outline.FlexibleOutline;
 import ej.mwt.style.outline.UniformOutline;
-import ej.mwt.style.outline.border.RoundedBorder;
+import ej.mwt.style.outline.border.FlexibleRectangularBorder;
 import ej.mwt.stylesheet.Stylesheet;
 import ej.mwt.stylesheet.cascading.CascadingStylesheet;
 import ej.mwt.stylesheet.selector.ClassSelector;
-import ej.mwt.stylesheet.selector.OddChildSelector;
+import ej.mwt.stylesheet.selector.Selector;
+import ej.mwt.stylesheet.selector.StateSelector;
 import ej.mwt.stylesheet.selector.TypeSelector;
 import ej.mwt.stylesheet.selector.combinator.AndCombinator;
 import ej.mwt.util.Alignment;
@@ -40,17 +43,97 @@ import ej.widget.container.List;
  */
 public class Main {
 
-    public static final int CS_SPLASH = 0;
-    public static final int CS_ROOT = 1;
-    public static final int CS_HOME_TITLE = 2;
+    /** The class selector of the root container of a page. */
+    public static final int CS_ROOT = 0;
+    /** The class selector of the top bar of a page. */
+    public static final int CS_TOP_BAR = 1;
+    /** The class selector of the title displayed in the top bar. */
+    public static final int CS_TOP_BAR_TITLE = 2;
+    /** The class selector of the widget a page displays below its header card. */
     public static final int CS_CENTER_WIDGET = 3;
-    public static final int CS_LIST_ITEM = 4;
-    public static final int CS_BUTTON = 5;
-    public static final int CS_TITLE = 6;
+    /** The class selector of the card introducing a page. */
+    public static final int CS_HEADER_CARD = 4;
+    /** The class selector of the short text displayed above the title of a header card. */
+    public static final int CS_HEADER_EYEBROW = 5;
+    /** The class selector of the title of a header card. */
+    public static final int CS_HEADER_TITLE = 6;
+    /** The class selector of the description of a header card. */
+    public static final int CS_HEADER_DESCRIPTION = 7;
+    /** The class selector of the label naming a section of the home page. */
+    public static final int CS_SECTION_LABEL = 8;
+    /** The class selector of a card grouping the content of a section. */
+    public static final int CS_CARD = 9;
+    /** The class selector of a navigation row. */
+    public static final int CS_ROW = 10;
+    /** The class selector displaying a divider under a navigation row. */
+    public static final int CS_ROW_DIVIDER = 11;
+    /** The class selector of the title and subtitle of a navigation row. */
+    public static final int CS_ROW_TEXTS = 12;
+    /** The class selector of the title of a navigation row. */
+    public static final int CS_ROW_TITLE = 13;
+    /** The class selector of the subtitle of a navigation row. */
+    public static final int CS_ROW_SUBTITLE = 14;
+    /** The class selector of the trailing chevron of a navigation row. */
+    public static final int CS_ROW_CHEVRON = 15;
+    /** The class selector of the icon tile of a navigation row demonstrating a transition. */
+    public static final int CS_ROW_ICON_ACCENT = 16;
+    /** The class selector of the icon tile of a navigation row demonstrating routing. */
+    public static final int CS_ROW_ICON_NEUTRAL = 17;
+    /** The class selector of a label introducing a group of values. */
+    public static final int CS_TITLE = 18;
+    /** The class selector of a push button. */
+    public static final int CS_BUTTON = 19;
+    /** The class selector of the card holding the content of a page. */
+    public static final int CS_CONTENT_CARD = 20;
 
-    private static final int CONCRETE_B75 = 0x262a2c;
-    private static final int CONCRETE_B50 = 0x4b5357;
+    /** The accent color of the application. */
     public static final int CORAL = 0xee502e;
+
+    private static final int BACKGROUND = 0x17191d;
+    private static final int CARD = 0x1e2024;
+    private static final int HEADER_CARD = 0x201f1e;
+    private static final int TILE_ACCENT = 0x3c2926;
+    private static final int TILE_NEUTRAL = 0x2e3033;
+    private static final int DIVIDER = 0x2e3033;
+    private static final int CONTROL = 0x25272a;
+    private static final int CONTROL_PRESSED = 0x33373b;
+    private static final int ROW_PRESSED = 0x2a2d33;
+    private static final int BUTTON_PRESSED = 0xc23f21;
+    private static final int TEXT_PRIMARY = 0xf2f0ec;
+    private static final int TEXT_MUTED = 0x8a8882;
+
+    private static final int SIDE_MARGIN = 30;
+    private static final int CARD_RADIUS = 24;
+    private static final int CARD_PADDING = 36;
+    private static final int TILE_SIZE = 70;
+    private static final int TILE_RADIUS = 20;
+    private static final int TOP_BAR_PADDING_V = 34;
+    private static final int TOP_BAR_PADDING_H = 42;
+    private static final int TOP_BAR_TITLE_MARGIN = 24;
+    private static final int ROW_ICON_MARGIN_V = 20;
+    private static final int ROW_ICON_MARGIN_H = 30;
+    private static final int ROW_TEXT_MARGIN_V = 6;
+    private static final int CHEVRON_MARGIN = 40;
+    private static final int DIVIDER_THICKNESS = 2;
+    private static final int NO_BORDER_THICKNESS = 0;
+    private static final int ACCENT_BAR_THICKNESS = 5;
+    private static final int HEADER_PADDING_V = 26;
+    private static final int HEADER_PADDING_H = 38;
+    private static final int HEADER_LINE_SPACING = 8;
+    private static final int SECTION_MARGIN_TOP = 32;
+    private static final int SECTION_MARGIN_BOTTOM = 20;
+    private static final int SECTION_INDENT = 15;
+    private static final int GAP = 24;
+
+    private static final int FONT_SIZE_TOP_BAR = 38;
+    private static final int FONT_SIZE_EYEBROW = 24;
+    private static final int FONT_SIZE_HEADER_TITLE = 44;
+    private static final int FONT_SIZE_DESCRIPTION = 30;
+    private static final int FONT_SIZE_SECTION = 24;
+    private static final int FONT_SIZE_ROW_TITLE = 36;
+    private static final int FONT_SIZE_ROW_SUBTITLE = 28;
+    private static final int FONT_SIZE_BODY = 32;
+
     private static final String REGULAR_FONT_PATH = "/fonts/SourceSansPro-Regular.ttf";
     private static final String BOLD_FONT_PATH = "/fonts/SourceSansPro-Bold.ttf";
 
@@ -67,83 +150,178 @@ public class Main {
         this.desktop.setStylesheet(this.buildStylesheet());
 
         Navigator.initialize(this.desktop, new ExamplePageFactory());
-        Navigator.getInstance().navigateTo(Pages.SPLASH);
+        // The navigator must be driven from the MicroUI thread.
+        MicroUI.callSerially(new Runnable() {
+            @Override
+            public void run() {
+                Navigator.getInstance().navigateTo(Pages.SPLASH);
+            }
+        });
     }
 
     private Stylesheet buildStylesheet() {
         CascadingStylesheet stylesheet = new CascadingStylesheet();
 
+        VectorFont regularFont = VectorFont.loadFont(REGULAR_FONT_PATH);
+        VectorFont boldFont = VectorFont.loadFont(BOLD_FONT_PATH);
+
         // default
         EditableStyle style = stylesheet.getDefaultStyle();
         style.setBackground(NoBackground.NO_BACKGROUND);
-        style.setColor(Colors.WHITE);
+        style.setColor(TEXT_PRIMARY);
 
         // type selectors
-        style = stylesheet.getSelectorStyle(new TypeSelector(VectorImageButton.class));
-        style.setDimension(OptimalDimension.OPTIMAL_DIMENSION_XY);
-        style.setBorder(new RoundedBorder(Colors.WHITE, 16, 5));
-        style.setMargin(new UniformOutline(20));
-
         style = stylesheet.getSelectorStyle(new TypeSelector(VectorLabel.class));
-        style.setExtraObject(VectorLabel.FONT_FIELD, VectorFont.loadFont(REGULAR_FONT_PATH));
-        style.setExtraObject(VectorLabel.FONT_SIZE_FIELD, 32);
+        style.setExtraObject(VectorLabel.FONT_FIELD, regularFont);
+        style.setExtraInt(VectorLabel.FONT_SIZE_FIELD, FONT_SIZE_BODY);
         style.setVerticalAlignment(Alignment.VCENTER);
-        style.setPadding(new UniformOutline(20));
 
         style = stylesheet.getSelectorStyle(new TypeSelector(VectorImageWidget.class));
         style.setHorizontalAlignment(Alignment.HCENTER);
         style.setVerticalAlignment(Alignment.VCENTER);
 
-        style = stylesheet.getSelectorStyle(new TypeSelector(VectorCheckBox.class));
-        style.setExtraObject(VectorLabel.FONT_FIELD, VectorFont.loadFont(REGULAR_FONT_PATH));
-        style.setExtraObject(VectorLabel.FONT_SIZE_FIELD, 32);
-        style.setVerticalAlignment(Alignment.VCENTER);
-        style.setExtraInt(VectorCheckBox.CHECKED_COLOR_FIELD, CORAL);
-        style.setMargin(new FlexibleOutline(2, 0, 2, 0));
+        style = stylesheet.getSelectorStyle(new TypeSelector(VectorImageButton.class));
+        style.setDimension(new FixedDimension(TILE_SIZE, TILE_SIZE));
+        style.setBackground(rounded(CONTROL, TILE_RADIUS));
 
-        style = stylesheet.getSelectorStyle(new TypeSelector(VectorRadioButton.class));
-        style.setExtraObject(VectorLabel.FONT_FIELD, VectorFont.loadFont(REGULAR_FONT_PATH));
-        style.setExtraObject(VectorLabel.FONT_SIZE_FIELD, 32);
+        style = stylesheet.getSelectorStyle(pressed(new TypeSelector(VectorImageButton.class)));
+        style.setBackground(rounded(CONTROL_PRESSED, TILE_RADIUS));
+
+        // the type selector applies to the check boxes and to the radio buttons, which share the
+        // VectorSelector superclass.
+        style = stylesheet.getSelectorStyle(new TypeSelector(VectorSelector.class));
+        style.setExtraObject(VectorLabel.FONT_FIELD, regularFont);
+        style.setExtraInt(VectorLabel.FONT_SIZE_FIELD, FONT_SIZE_BODY);
         style.setVerticalAlignment(Alignment.VCENTER);
-        style.setExtraInt(VectorCheckBox.CHECKED_COLOR_FIELD, CORAL);
-        style.setMargin(new FlexibleOutline(2, 0, 2, 0));
+        style.setExtraInt(VectorSelector.CHECKED_COLOR_FIELD, CORAL);
+        style.setMargin(new FlexibleOutline(GAP / 2, 0, GAP / 2, 0));
+
+        style = stylesheet.getSelectorStyle(pressed(new TypeSelector(VectorSelector.class)));
+        style.setColor(CORAL);
 
         style = stylesheet.getSelectorStyle(new TypeSelector(List.class));
         style.setDimension(OptimalDimension.OPTIMAL_DIMENSION_Y);
+        style.setVerticalAlignment(Alignment.TOP);
 
-        // class selectors
-        style = stylesheet.getSelectorStyle(new ClassSelector(CS_SPLASH));
-        style.setBackground(new RectangularBackground(Colors.BLACK));
-
+        // page chrome
         style = stylesheet.getSelectorStyle(new ClassSelector(CS_ROOT));
-        style.setBackground(new RectangularBackground(CONCRETE_B75));
+        style.setBackground(new RectangularBackground(BACKGROUND));
+        style.setPadding(new FlexibleOutline(0, SIDE_MARGIN, 0, SIDE_MARGIN));
 
-        style = stylesheet.getSelectorStyle(new ClassSelector(CS_HOME_TITLE));
-        style.setBackground(new RectangularBackground(CORAL));
-        style.setHorizontalAlignment(Alignment.HCENTER);
-        style.setExtraObject(VectorLabel.FONT_FIELD, VectorFont.loadFont(BOLD_FONT_PATH));
+        style = stylesheet.getSelectorStyle(new ClassSelector(CS_TOP_BAR));
+        style.setPadding(new FlexibleOutline(TOP_BAR_PADDING_V, TOP_BAR_PADDING_H,
+                TOP_BAR_PADDING_V, TOP_BAR_PADDING_H));
 
-        style = stylesheet.getSelectorStyle(new ClassSelector(CS_TITLE));
-        style.setExtraObject(VectorLabel.FONT_FIELD, VectorFont.loadFont(BOLD_FONT_PATH));
+        style = stylesheet.getSelectorStyle(new ClassSelector(CS_TOP_BAR_TITLE));
+        style.setExtraObject(VectorLabel.FONT_FIELD, boldFont);
+        style.setExtraInt(VectorLabel.FONT_SIZE_FIELD, FONT_SIZE_TOP_BAR);
+        style.setHorizontalAlignment(Alignment.LEFT);
+        style.setMargin(new FlexibleOutline(0, TOP_BAR_TITLE_MARGIN, 0, TOP_BAR_TITLE_MARGIN));
+
+        // header card
+        style = stylesheet.getSelectorStyle(new ClassSelector(CS_HEADER_CARD));
+        style.setBackground(rounded(HEADER_CARD, CARD_RADIUS));
+        style.setBorder(new FlexibleRectangularBorder(CORAL, 0, 0, 0, ACCENT_BAR_THICKNESS));
+        style.setPadding(new FlexibleOutline(HEADER_PADDING_V, HEADER_PADDING_H, HEADER_PADDING_V,
+                HEADER_PADDING_H));
+
+        style = stylesheet.getSelectorStyle(new ClassSelector(CS_HEADER_EYEBROW));
+        style.setExtraObject(VectorLabel.FONT_FIELD, boldFont);
+        style.setExtraInt(VectorLabel.FONT_SIZE_FIELD, FONT_SIZE_EYEBROW);
+        style.setColor(CORAL);
+        style.setMargin(new FlexibleOutline(0, 0, HEADER_LINE_SPACING, 0));
+
+        style = stylesheet.getSelectorStyle(new ClassSelector(CS_HEADER_TITLE));
+        style.setExtraObject(VectorLabel.FONT_FIELD, boldFont);
+        style.setExtraInt(VectorLabel.FONT_SIZE_FIELD, FONT_SIZE_HEADER_TITLE);
+        style.setMargin(new FlexibleOutline(0, 0, HEADER_LINE_SPACING, 0));
+
+        style = stylesheet.getSelectorStyle(new ClassSelector(CS_HEADER_DESCRIPTION));
+        style.setExtraInt(VectorLabel.FONT_SIZE_FIELD, FONT_SIZE_DESCRIPTION);
+        style.setColor(TEXT_MUTED);
+
+        // sections and cards
+        style = stylesheet.getSelectorStyle(new ClassSelector(CS_SECTION_LABEL));
+        style.setExtraObject(VectorLabel.FONT_FIELD, boldFont);
+        style.setExtraInt(VectorLabel.FONT_SIZE_FIELD, FONT_SIZE_SECTION);
+        style.setColor(TEXT_MUTED);
+        style.setHorizontalAlignment(Alignment.LEFT);
+        style.setMargin(new FlexibleOutline(SECTION_MARGIN_TOP, 0, SECTION_MARGIN_BOTTOM,
+                SECTION_INDENT));
+
+        style = stylesheet.getSelectorStyle(new ClassSelector(CS_CARD));
+        style.setBackground(rounded(CARD, CARD_RADIUS));
+
+        style = stylesheet.getSelectorStyle(new ClassSelector(CS_CONTENT_CARD));
+        style.setBackground(rounded(CARD, CARD_RADIUS));
+        style.setPadding(new UniformOutline(CARD_PADDING));
 
         style = stylesheet.getSelectorStyle(new ClassSelector(CS_CENTER_WIDGET));
-        style.setMargin(new FlexibleOutline(20, 20, 0, 20));
+        style.setMargin(new FlexibleOutline(GAP, 0, 0, 0));
 
-        style = stylesheet.getSelectorStyle(new ClassSelector(CS_LIST_ITEM));
-        style.setBackground(new RectangularBackground(CONCRETE_B50));
+        // navigation rows
+        style = stylesheet.getSelectorStyle(pressed(new ClassSelector(CS_ROW)));
+        style.setBackground(new RectangularBackground(ROW_PRESSED));
 
-        style = stylesheet.getSelectorStyle(
-                new AndCombinator(new ClassSelector(CS_LIST_ITEM), OddChildSelector.ODD_CHILD_SELECTOR));
-        style.setBackground(new RectangularBackground(CONCRETE_B75));
+        style = stylesheet.getSelectorStyle(new ClassSelector(CS_ROW_DIVIDER));
+        style.setExtraInt(NavigationRow.DIVIDER_COLOR_FIELD, DIVIDER);
+        style.setExtraInt(NavigationRow.DIVIDER_THICKNESS_FIELD, DIVIDER_THICKNESS);
+
+        style = stylesheet.getSelectorStyle(new ClassSelector(CS_ROW_TEXTS));
+        style.setVerticalAlignment(Alignment.VCENTER);
+        style.setMargin(new FlexibleOutline(ROW_TEXT_MARGIN_V, 0, ROW_TEXT_MARGIN_V, 0));
+
+        style = stylesheet.getSelectorStyle(new ClassSelector(CS_ROW_TITLE));
+        style.setExtraObject(VectorLabel.FONT_FIELD, boldFont);
+        style.setExtraInt(VectorLabel.FONT_SIZE_FIELD, FONT_SIZE_ROW_TITLE);
+        style.setHorizontalAlignment(Alignment.LEFT);
+
+        style = stylesheet.getSelectorStyle(new ClassSelector(CS_ROW_SUBTITLE));
+        style.setExtraInt(VectorLabel.FONT_SIZE_FIELD, FONT_SIZE_ROW_SUBTITLE);
+        style.setColor(TEXT_MUTED);
+        style.setHorizontalAlignment(Alignment.LEFT);
+
+        style = stylesheet.getSelectorStyle(new ClassSelector(CS_ROW_CHEVRON));
+        style.setMargin(new FlexibleOutline(0, CHEVRON_MARGIN, 0, 0));
+
+        style = stylesheet.getSelectorStyle(new ClassSelector(CS_ROW_ICON_ACCENT));
+        style.setDimension(new FixedDimension(TILE_SIZE, TILE_SIZE));
+        style.setBackground(rounded(TILE_ACCENT, TILE_RADIUS));
+        style.setMargin(new FlexibleOutline(ROW_ICON_MARGIN_V, ROW_ICON_MARGIN_H,
+                ROW_ICON_MARGIN_V, ROW_ICON_MARGIN_H));
+
+        style = stylesheet.getSelectorStyle(new ClassSelector(CS_ROW_ICON_NEUTRAL));
+        style.setDimension(new FixedDimension(TILE_SIZE, TILE_SIZE));
+        style.setBackground(rounded(TILE_NEUTRAL, TILE_RADIUS));
+        style.setMargin(new FlexibleOutline(ROW_ICON_MARGIN_V, ROW_ICON_MARGIN_H,
+                ROW_ICON_MARGIN_V, ROW_ICON_MARGIN_H));
+
+        // page content
+        style = stylesheet.getSelectorStyle(new ClassSelector(CS_TITLE));
+        style.setExtraObject(VectorLabel.FONT_FIELD, boldFont);
+        style.setColor(TEXT_MUTED);
+        style.setHorizontalAlignment(Alignment.LEFT);
+        style.setMargin(new FlexibleOutline(0, 0, GAP / 2, 0));
 
         style = stylesheet.getSelectorStyle(new ClassSelector(CS_BUTTON));
         style.setDimension(OptimalDimension.OPTIMAL_DIMENSION_XY);
-        style.setBackground(new RectangularBackground(CORAL));
+        style.setBackground(rounded(CORAL, TILE_RADIUS));
         style.setHorizontalAlignment(Alignment.HCENTER);
-        style.setPadding(new FlexibleOutline(8, 64, 8, 64));
-        style.setMargin(new FlexibleOutline(20, 0, 20, 0));
+        style.setPadding(new FlexibleOutline(GAP / 2, CARD_PADDING, GAP / 2, CARD_PADDING));
+        style.setMargin(new UniformOutline(GAP / 2));
+
+        style = stylesheet.getSelectorStyle(pressed(new ClassSelector(CS_BUTTON)));
+        style.setBackground(rounded(BUTTON_PRESSED, TILE_RADIUS));
 
         return stylesheet;
+    }
+
+    private static RoundedBackground rounded(int color, int cornerRadius) {
+        return new RoundedBackground(color, cornerRadius, NO_BORDER_THICKNESS);
+    }
+
+    private static Selector pressed(Selector selector) {
+        return new AndCombinator(selector, new StateSelector(StateSelector.ACTIVE));
     }
 
 }

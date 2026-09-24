@@ -5,11 +5,11 @@ Use of this source code is governed by a BSD-style license that can be found wit
 Build: 7E4D1F7C
 */
 plugins {
-    id("com.microej.gradle.application") version "1.6.0"
+    id("com.microej.gradle.application") version "1.8.0"
 }
 
 group="com.microej.example"
-version="1.0.0"
+version="1.1.0"
 
 microej {
     applicationEntryPoint = "com.microej.example.navigationframework.Main"
@@ -44,8 +44,9 @@ dependencies {
 
     implementation("ej.library.ui:mwt:3.7.1")
     implementation("ej.library.ui:widget:5.6.1")
+    implementation("ej.library.ui:motion:4.0.1")
 
-    implementation("ej.library.ui:navigation-framework:1.0.1")
+    implementation("ej.library.ui:navigation-framework:2.0.0")
 
     // VEE Port dependency
     // If any local VEE Port path is provided, look for the local source, otherwise fetch the VEE Port as module dependency

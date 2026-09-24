@@ -1,21 +1,23 @@
 /*
 Copyright 2026 MicroEJ Corp. All rights reserved.
 Use of this source code is governed by a BSD-style license that can be found with this software
+
+Build: 7E4D1F7C
 */
 package com.microej.example.navigationframework.pages.advanced;
 
-import com.microej.example.navigationframework.Main;
 import com.microej.example.navigationframework.navigation.Pages;
-import com.microej.example.navigationframework.pages.BasePage;
-import com.microej.example.navigationframework.widget.VectorButton;
-import com.microej.example.navigationframework.widget.VectorLabel;
-import ej.mwt.Widget;
 import ej.navigation.Navigator;
 import ej.widget.basic.OnClickListener;
-import ej.widget.container.LayoutOrientation;
 import ej.widget.container.List;
 
-public class Advanced2Page extends BasePage {
+/**
+ * The second page of the advanced navigation demonstration, swapping the current page of the
+ * history.
+ */
+public class Advanced2Page extends AdvancedPage {
+
+    private static final String REPLACE_WITH_BUTTON_TEXT = "replaceWith Page 3";
 
     @Override
     public String getTitle() {
@@ -23,32 +25,18 @@ public class Advanced2Page extends BasePage {
     }
 
     @Override
-    protected Widget getCenterWidget() {
-        List mainList = new List(LayoutOrientation.VERTICAL);
+    protected String getDescription() {
+        return "replaceWith swaps the current page of the history";
+    }
 
-        VectorLabel historyLabel = new VectorLabel("Navigation History: ");
-        historyLabel.addClassSelector(Main.CS_TITLE);
-        mainList.addChild(historyLabel);
-
-        VectorLabel history = new VectorLabel(AdvancedHelper.getHistoryString());
-        mainList.addChild(history);
-
-        List buttonsList = new List(LayoutOrientation.HORIZONTAL);
-
-        VectorButton replaceWith = new VectorButton("replaceWith Page 3");
-        replaceWith.addClassSelector(Main.CS_BUTTON);
-        replaceWith.setOnClickListener(new OnClickListener() {
+    @Override
+    protected void addButtons(List buttonsList) {
+        buttonsList.addChild(createButton(REPLACE_WITH_BUTTON_TEXT, new OnClickListener() {
             @Override
             public void onClick() {
                 Navigator.getInstance().replaceWith(Pages.ADVANCED_3_PAGE);
             }
-        });
-
-        buttonsList.addChild(replaceWith);
-
-        mainList.addChild(buttonsList);
-
-        return mainList;
+        }));
     }
 
 }

@@ -1,23 +1,22 @@
 /*
 Copyright 2026 MicroEJ Corp. All rights reserved.
 Use of this source code is governed by a BSD-style license that can be found with this software
+
+Build: 7E4D1F7C
 */
 package com.microej.example.navigationframework.pages.advanced;
 
-import com.microej.example.navigationframework.Main;
 import com.microej.example.navigationframework.navigation.Pages;
-import com.microej.example.navigationframework.pages.BasePage;
-import com.microej.example.navigationframework.widget.VectorButton;
-import com.microej.example.navigationframework.widget.VectorLabel;
-import ej.mwt.Widget;
 import ej.navigation.Navigator;
 import ej.widget.basic.OnClickListener;
-import ej.widget.container.LayoutOrientation;
 import ej.widget.container.List;
 
-import java.util.Vector;
+/**
+ * The first page of the advanced navigation demonstration, pushing a new page on the history.
+ */
+public class Advanced1Page extends AdvancedPage {
 
-public class Advanced1Page extends BasePage {
+    private static final String NAVIGATE_TO_BUTTON_TEXT = "navigateTo Page 2";
 
     @Override
     public String getTitle() {
@@ -25,28 +24,18 @@ public class Advanced1Page extends BasePage {
     }
 
     @Override
-    protected Widget getCenterWidget() {
-        List mainList = new List(LayoutOrientation.VERTICAL);
+    protected String getDescription() {
+        return "navigateTo pushes a new page on top of the history";
+    }
 
-        VectorLabel historyLabel = new VectorLabel("Navigation History: ");
-        historyLabel.addClassSelector(Main.CS_TITLE);
-        mainList.addChild(historyLabel);
-
-        VectorLabel history = new VectorLabel(AdvancedHelper.getHistoryString());
-        mainList.addChild(history);
-
-        VectorButton navigateTo = new VectorButton("navigateTo Page 2");
-        navigateTo.addClassSelector(Main.CS_BUTTON);
-        navigateTo.setOnClickListener(new OnClickListener() {
+    @Override
+    protected void addButtons(List buttonsList) {
+        buttonsList.addChild(createButton(NAVIGATE_TO_BUTTON_TEXT, new OnClickListener() {
             @Override
             public void onClick() {
                 Navigator.getInstance().navigateTo(Pages.ADVANCED_2_PAGE);
             }
-        });
-
-        mainList.addChild(navigateTo);
-
-        return mainList;
+        }));
     }
 
 }

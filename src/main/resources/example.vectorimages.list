@@ -1,7 +1,16 @@
 # Copyright 2026 MicroEJ Corp. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be found with this software
+#
+# Build: 7E4D1F7C
 
 
 /images/mascot.svg:VGF
 /images/back.svg:VGF
 /images/home.svg:VGF
+/images/chevron.svg:VGF
+/images/immediate.svg:VGF
+/images/slide.svg:VGF
+/images/fade.svg:VGF
+/images/custom.svg:VGF
+/images/arguments.svg:VGF
+/images/advanced.svg:VGF

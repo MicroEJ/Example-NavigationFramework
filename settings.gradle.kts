@@ -6,4 +6,3 @@
  */
 
 rootProject.name = "navigation-framework-examples"
-

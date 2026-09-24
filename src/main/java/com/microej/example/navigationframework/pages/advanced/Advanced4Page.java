@@ -1,21 +1,23 @@
 /*
 Copyright 2026 MicroEJ Corp. All rights reserved.
 Use of this source code is governed by a BSD-style license that can be found with this software
+
+Build: 7E4D1F7C
 */
 package com.microej.example.navigationframework.pages.advanced;
 
-import com.microej.example.navigationframework.Main;
 import com.microej.example.navigationframework.navigation.Pages;
-import com.microej.example.navigationframework.pages.BasePage;
-import com.microej.example.navigationframework.widget.VectorButton;
-import com.microej.example.navigationframework.widget.VectorLabel;
-import ej.mwt.Widget;
 import ej.navigation.Navigator;
 import ej.widget.basic.OnClickListener;
-import ej.widget.container.LayoutOrientation;
 import ej.widget.container.List;
 
-public class Advanced4Page extends BasePage {
+/**
+ * The last page of the advanced navigation demonstration, popping the history down to the first
+ * page of the demonstration.
+ */
+public class Advanced4Page extends AdvancedPage {
+
+    private static final String NAVIGATE_BACK_TO_BUTTON_TEXT = "navigateBackTo Page 1";
 
     @Override
     public String getTitle() {
@@ -23,42 +25,19 @@ public class Advanced4Page extends BasePage {
     }
 
     @Override
-    protected Widget getCenterWidget() {
-        List mainList = new List(LayoutOrientation.VERTICAL);
+    protected String getDescription() {
+        return "navigateBackTo pops the history down to a given page";
+    }
 
-        VectorLabel historyLabel = new VectorLabel("Navigation History: ");
-        historyLabel.addClassSelector(Main.CS_TITLE);
-        mainList.addChild(historyLabel);
-
-        VectorLabel history = new VectorLabel(AdvancedHelper.getHistoryString());
-        mainList.addChild(history);
-
-        List buttonsList = new List(LayoutOrientation.HORIZONTAL);
-
-        VectorButton back = new VectorButton("Back");
-        back.addClassSelector(Main.CS_BUTTON);
-        back.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick() {
-                Navigator.getInstance().navigateBack();
-            }
-        });
-
-        VectorButton replaceWith = new VectorButton("navigateBackTo Page 1");
-        replaceWith.addClassSelector(Main.CS_BUTTON);
-        replaceWith.setOnClickListener(new OnClickListener() {
+    @Override
+    protected void addButtons(List buttonsList) {
+        addBackButton(buttonsList);
+        buttonsList.addChild(createButton(NAVIGATE_BACK_TO_BUTTON_TEXT, new OnClickListener() {
             @Override
             public void onClick() {
                 Navigator.getInstance().navigateBackTo(Pages.ADVANCED_1_PAGE);
             }
-        });
-
-        buttonsList.addChild(back);
-        buttonsList.addChild(replaceWith);
-
-        mainList.addChild(buttonsList);
-
-        return mainList;
+        }));
     }
 
 }
